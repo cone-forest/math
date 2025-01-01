@@ -65,7 +65,7 @@ BENCHMARK(BM_vector_rotation);
 
 static void BM_vector_scale(benchmark::State& state) {
   for (auto _ : state) {
-    auto v3 = v1 * mr::Matr4f::scale({1, 2, 3});
+    auto v3 = v1 * mr::ScaleMatr3f({1, 2, 3});
     benchmark::DoNotOptimize(v3);
   }
 }

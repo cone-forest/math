@@ -44,6 +44,7 @@ namespace mr {
           _data.normalize();
         }
 
+      constexpr Norm(const VecT &v) noexcept : Norm(unchecked, v.normalized_unchecked()) {}
 
       constexpr Norm(UncheckedTag, const VecT &v) noexcept : _data(v) {
           assert(mr::equal(v.length(), 1, 0.1f));
@@ -145,10 +146,6 @@ namespace mr {
         }
 
       private:
-        friend struct Vec<T, N>;
-        friend struct Rotation<T>;
-        constexpr Norm(const VecT &v) noexcept : Norm(unchecked, v) {}
-
         VecT _data;
     };
 } // namespace mr

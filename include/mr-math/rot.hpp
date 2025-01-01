@@ -13,34 +13,6 @@ namespace mr {
   // aliases
   using Rotf = Rotation<float>;
   using Rotd = Rotation<double>;
-
-  template <std::floating_point T = float>
-    struct Yaw {
-      const mr::Radians<T> value = 0;
-      Yaw() noexcept = default;
-      Yaw(const mr::Radians<T> v) : value(v) {}
-      operator T() const {return value.value;}
-      operator mr::Radians<T>() const {return value;}
-    };
-
-  template <std::floating_point T = float>
-    struct Pitch {
-      const mr::Radians<T> value = 0;
-      Pitch() noexcept = default;
-      Pitch(const mr::Radians<T> v) : value(v) {}
-      operator T() const {return value.value;}
-      operator mr::Radians<T>() const {return value;}
-    };
-
-  template <std::floating_point T = float>
-    struct Roll {
-      const mr::Radians<T> value = 0;
-      Roll() noexcept = default;
-      Roll(const mr::Radians<T> v) : value(v) {}
-      operator T() const {return value.value;}
-      operator mr::Radians<T>() const {return value;}
-    };
-
   // yaw, pitch, roll (in radians)
   template <std::floating_point T>
     struct [[nodiscard]] Rotation {
@@ -76,21 +48,21 @@ namespace mr {
 
         // angle in radians
         constexpr Rotation & operator+=(Pitch<T> angle_rad) noexcept {
-          _data *= MatrT::rotate({right()}, angle_rad);
+          _data *= mr::rotate(angle_rad.value, right());
 
           return *this;
         }
 
         // angle in radians
         constexpr Rotation & operator+=(Yaw<T> angle_rad) noexcept {
-          _data *= MatrT::rotate({up()}, angle_rad);
+          _data *= mr::rotate(angle_rad.value, up());
 
           return *this;
         }
 
         // angle in radians
         constexpr Rotation & operator+=(Roll<T> angle_rad) noexcept {
-          _data *= MatrT::rotate({direction()}, angle_rad);
+          _data *= mr::rotate(angle_rad.value, direction());
 
           return *this;
         }

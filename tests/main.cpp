@@ -207,11 +207,11 @@ TEST_F(MatrixTest, Identity) {
 }
 
 TEST_F(MatrixTest, ScaleVector) {
-  EXPECT_EQ(mr::Vec3f(1, -1, 0) * mr::Matr4f::scale({30, 47, 80}), mr::Vec3f(30, -47, 0));
+  EXPECT_EQ(mr::Vec3f(1, -1, 0) * mr::ScaleMatr3f({30, 47, 80}), mr::Vec3f(30, -47, 0));
 }
 
 TEST_F(MatrixTest, TranslateVector) {
-  EXPECT_EQ(mr::Vec3f(0, 0, 22) * mr::Matr4f::translate({30, 47, 80}), mr::Vec3f(30, 47, 102));
+  EXPECT_EQ(mr::Vec3f(0, 0, 22) * mr::TranslateMatr3f({30, 47, 80}), mr::Vec3f(30, 47, 102));
 }
 
 TEST_F(MatrixTest, RotateBasis) {
@@ -233,7 +233,7 @@ TEST_F(MatrixTest, RotateBasis) {
 TEST_F(MatrixTest, RotateVector) {
   mr::Vec3f v{30, 47, 80};
   mr::Vec3f expected{38.340427, 81.678845, 36.980571};
-  EXPECT_TRUE(mr::equal(v * mr::Matr4f::rotate({1, 1, 1}, 102_deg), expected, 0.0001));
+  EXPECT_TRUE(mr::equal(v * mr::rotate(mr::Radiansf(102_deg), mr::Norm3f(1, 1, 1)), expected, 0.0001));
 }
 
 class QuaternionTest : public ::testing::Test {
@@ -289,8 +289,8 @@ TEST_F(QuaternionTest, Normalize) {
 
 TEST_F(QuaternionTest, RotateMatrix) {
   mr::Vec3f v {0, 1, 0};
-  mr::Vec3f expected {0, 0, 1};
-  EXPECT_TRUE(mr::equal(v * q1, expected));
+  mr::Vec3f expected {0, 0, -1};
+  EXPECT_TRUE(mr::equal(v * mr::rotate(q1), expected));
 }
 
 // TODO: camera tests

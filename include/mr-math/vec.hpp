@@ -147,7 +147,7 @@ namespace mr {
       constexpr std::optional<NormT> normalized() const noexcept {
         auto len = length2();
         if (len <= _epsilon) [[unlikely]] return std::nullopt;
-        return {{*this / std::sqrt(len)}};
+        return {{mr::unchecked, *this / std::sqrt(len)}};
       };
 
       constexpr Vec & normalize_unchecked() noexcept {
@@ -158,7 +158,7 @@ namespace mr {
 
       constexpr NormT normalized_unchecked() const noexcept {
         auto len = length2();
-        return {*this / std::sqrt(len)};
+        return {mr::unchecked, *this / std::sqrt(len)};
       };
 
       // use normalize() for higher precision
@@ -173,7 +173,7 @@ namespace mr {
       constexpr std::optional<NormT> normalized_fast() const noexcept {
         auto len = length2();
         if (len <= _epsilon) [[unlikely]] return std::nullopt;
-        return {{*this * fast_rsqrt(len)}};
+        return {{mr::unchecked, *this * fast_rsqrt(len)}};
       };
 
       // use normalize_unchecked() for higher precision
@@ -186,7 +186,7 @@ namespace mr {
       // use normalized_unchecked() for higher precision
       constexpr NormT normalized_fast_unchecked() const {
         auto l = length2();
-        return {*this * fast_rsqrt(l)};
+        return {mr::unchecked, *this * fast_rsqrt(l)};
       };
 
       // dot product

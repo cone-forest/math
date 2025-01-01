@@ -31,6 +31,33 @@ namespace mr {
         return Vec4<T>{_angle._data, _vec.x(), _vec.y(), _vec.z()};
       }
 
+      operator Matr<T, 4>() const noexcept {
+        T rad = w();
+        mr::Norm n = vec().normalized_unchecked();
+
+        T co = std::cos(rad);
+        T si = std::sin(rad);
+        T nco = 1 - co;
+        Vec<T, 3> tmp0 {n * n * nco + Vec<T, 3>{co}};
+
+        // TODO: implement using Vec4(Vec3, T) constructor
+        Matr4<T> tmp1 = ScaleMatr<T, 4>({tmp0.x(), tmp0.y(), tmp0.z(), 1});
+        Matr4<T> tmp2 = Matr4<T> {
+          0, n.x() * n.y() * nco, n.x() * n.z() * nco, 0,
+            n.x() * n.y() * nco,                   0, n.y() * n.z() * nco, 0,
+            n.x() * n.z() * nco, n.y() * n.z() * nco,                   0, 0,
+            0,                   0,                   0, 0
+        };
+        Matr4<T> tmp3 = Matr4<T> {
+          0, -n.z() * si,  n.y() * si, 0,
+            n.z() * si,           0, -n.x() * si, 0,
+            -n.y() * si,  n.x() * si,           0, 0,
+            0,           0,           0, 0
+        };
+
+        return tmp1 + tmp2 + tmp3;
+      }
+
       // normalize methods
       constexpr Quat & normalize() noexcept {
         auto len = _vec.length2() + w() * w();
@@ -81,19 +108,6 @@ namespace mr {
         lhs = lhs * rhs;
         return lhs;
       }
-
-        friend constexpr Vec<T, 3> operator*(const Vec<T, 3> &lhs, const Quat &rhs) noexcept {
-          auto vq = rhs.vec() * std::cos(rhs.w() / 2);
-          auto t = vq % lhs;
-          auto u = std::sin(rhs.w() / 2) * t + vq % t;
-
-          return {lhs + u + u};
-        }
-      template <std::size_t N>
-        friend constexpr Vec<T, N> & operator*=(Vec<T, N> &lhs, const Quat &rhs) noexcept {
-          lhs = lhs * rhs;
-          return lhs;
-        }
     };
 }
 
